@@ -1,6 +1,7 @@
 import json
+import os.path
 
-SETTINGS_JSON = "/home/avbk/Desktop/settings.json"
+SETTINGS_JSON = os.path.expanduser("~/.hafif/settings.json")
 
 
 class JsonObject:
