@@ -27,9 +27,8 @@ class HafifWindow(gtk.Window):
         f.put(b, 100, 100)
         self.add(ProjectLayout(projects[0]))
 
+        self.connect("destroy", gtk.main_quit)
         self.show_all()
-        self.move(100, 0)
-
 
     def click(self, widget):
         x = self.fixed.child_get_property(self.button, "x")
@@ -37,7 +36,6 @@ class HafifWindow(gtk.Window):
             gtk.main_quit()
         else:
             self.fixed.child_set_property(self.button, "x", x + 10)
-
 
     def area_draw(self, widget, event):
         cr = widget.get_window().cairo_create()
@@ -48,9 +46,48 @@ class HafifWindow(gtk.Window):
         return False
 
 
+PROJECT_ICON_SIZE = 96
+
+SHORTCUTS_COL_COUNT = 4
+SHORTCUTS_ROW_COUNT = 2
+SHORTCUT_ICON_SIZE = 48
+SHORTCUTS_PADDING = 16
+
+
 class ProjectLayout(gtk.VBox):
     def __init__(self, project):
-        super(ProjectLayout, self).__init__()
+        super(ProjectLayout, self).__init__(False)
         self.project = project
-        self.add(gtk.Label(self.project.title))
+        self.__add_icon()
+        self.__add_title()
+        self.__add_shortcuts()
+
+    def __add_icon(self):
+        self.icon = gtk.Image()
+        self.icon.set_from_file(self.project.icon)
+        self.icon.set_size_request(PROJECT_ICON_SIZE, PROJECT_ICON_SIZE)
+        self.pack_start(self.icon, False)
+
+    def __add_title(self):
+        self.title = gtk.Label()
+        self.title.set_markup('<span color="#AAAAAA">%s</span>' % self.project.title)
+        self.pack_start(self.title, False)
+
+    def __add_shortcuts(self):
+        self.shortcuts = gtk.Table(SHORTCUTS_COL_COUNT, SHORTCUTS_ROW_COUNT, False)
+        self.shortcuts.set_col_spacings(SHORTCUTS_PADDING)
+        self.shortcuts.set_row_spacings(SHORTCUTS_PADDING)
+        col = 0
+        row = 0
+        for shortcut in self.project.shortcuts:
+            button = gtk.Image()
+            button.set_from_file("/usr/share/icons/Faenza/%s.png" % shortcut.icon)
+            button.set_size_request(SHORTCUT_ICON_SIZE, SHORTCUT_ICON_SIZE)
+            self.shortcuts.attach(button, col, col + 1, row, row + 1, 0, 0)
+            col += 1
+            if col % SHORTCUTS_COL_COUNT == 0:
+                row += 1
+                col = 0
+        self.pack_start(self.shortcuts, False)
+
 
