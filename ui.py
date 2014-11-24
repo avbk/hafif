@@ -80,10 +80,7 @@ class ProjectLayout(gtk.VBox):
         col = 0
         row = 0
         for shortcut in self.project.shortcuts:
-            button = gtk.Image()
-            button.set_from_file("/usr/share/icons/Faenza/%s.png" % shortcut.icon)
-            button.set_size_request(SHORTCUT_ICON_SIZE, SHORTCUT_ICON_SIZE)
-            self.shortcuts.attach(button, col, col + 1, row, row + 1, 0, 0)
+            self.shortcuts.attach(ShortcutIcon(shortcut), col, col + 1, row, row + 1, 0, 0)
             col += 1
             if col % SHORTCUTS_COL_COUNT == 0:
                 row += 1
@@ -91,3 +88,15 @@ class ProjectLayout(gtk.VBox):
         self.pack_start(self.shortcuts, False)
 
 
+class ShortcutIcon(gtk.Button):
+    def __init__(self, shortcut):
+        super(ShortcutIcon, self).__init__()
+        icon = gtk.Image()
+        icon.set_from_file("/usr/share/icons/Faenza/%s.png" % shortcut.icon)
+        icon.set_size_request(SHORTCUT_ICON_SIZE, SHORTCUT_ICON_SIZE)
+        self.set_relief(gtk.RELIEF_NONE)
+        self.set_image(icon)
+        self.connect("clicked", self.__on_icon_click, shortcut)
+
+    def __on_icon_click(self, _, shortcut):
+        print shortcut.command
