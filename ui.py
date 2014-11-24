@@ -41,7 +41,10 @@ class HafifWindow(gtk.Window):
         self.connect("expose-event", self.area_draw)
         self.connect("destroy", gtk.main_quit)
 
-        self.add(ProjectLayout(projects[0]))
+        hbox = gtk.HBox()
+        for project in projects:
+            hbox.add(ProjectLayout(project))
+        self.add(hbox)
         self.show_all()
 
     def area_draw(self, widget, event):
