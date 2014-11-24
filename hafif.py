@@ -1,4 +1,7 @@
+import gtk
 import data
+from ui import HafifWindow
 
 projects = data.load()
-data.save(projects)
+window = HafifWindow(projects)
+gtk.main()
