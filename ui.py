@@ -1,5 +1,7 @@
 import cairo
 import gtk
+import shlex
+import subprocess
 
 
 class HafifWindow(gtk.Window):
@@ -99,4 +101,4 @@ class ShortcutIcon(gtk.Button):
         self.connect("clicked", self.__on_icon_click, shortcut)
 
     def __on_icon_click(self, _, shortcut):
-        print shortcut.command
+        subprocess.Popen(shlex.split(shortcut.command))
