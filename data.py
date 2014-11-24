@@ -1,6 +1,7 @@
 import json
+import os.path
 
-SETTINGS_JSON = "/home/avbk/Desktop/settings.json"
+SETTINGS_JSON = os.path.expanduser("~/.hafif/settings.json")
 
 
 class JsonObject:
@@ -26,7 +27,7 @@ class Todo(JsonObject):
 
 class Project(JsonObject):
     def __init__(self, project_json):
-        self._attr_from_dict(project_json, ['title'])
+        self._attr_from_dict(project_json, ['title', 'icon'])
         self.shortcuts = [Shortcut(json) for json in project_json['shortcuts']]
         self.links = [Link(json) for json in project_json['links']]
         self.todos = [Todo(json) for json in project_json['todos']]
