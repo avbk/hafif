@@ -39,24 +39,10 @@ class HafifWindow(gtk.Window):
 
         self.set_app_paintable(True)
         self.connect("expose-event", self.area_draw)
-        b = gtk.Button()
-        b.set_label("Hello")
-        self.button = b
-        f = gtk.Fixed()
-        self.fixed = f
-        b.connect("clicked", self.click)
-        f.put(b, 100, 100)
-        self.add(ProjectLayout(projects[0]))
-
         self.connect("destroy", gtk.main_quit)
-        self.show_all()
 
-    def click(self, widget):
-        x = self.fixed.child_get_property(self.button, "x")
-        if x > 250:
-            gtk.main_quit()
-        else:
-            self.fixed.child_set_property(self.button, "x", x + 10)
+        self.add(ProjectLayout(projects[0]))
+        self.show_all()
 
     def area_draw(self, widget, event):
         cr = widget.get_window().cairo_create()
